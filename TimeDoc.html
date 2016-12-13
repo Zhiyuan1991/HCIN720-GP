@@ -80,15 +80,15 @@
 				var time_ratio=Math.min(time_on_socialmedia/set_total_time,1);
 				document.getElementById("fraction").innerHTML = time_ratio*100+"%";
 								
-				sparkSetPos0(40+time_ratio*120);
+				sparkSetPos0(40+time_ratio*110);
 								
 				if (time_ratio<=0.5){
-					sparkSetPos2(180-time_ratio*40);//rotate small circle
+					sparkSetPos2(180-time_ratio*30);//rotate small circle
 					sparkSetPos1(reset_pos1);
 				}
 				else{
-					sparkSetPos2(180-40);//rotate small circle
-					sparkSetPos1(170-40*(time_ratio-0.5)*2);//rotate big circle
+					sparkSetPos2(180-30);//rotate small circle
+					sparkSetPos1(170-30*(time_ratio-0.5)*2);//rotate big circle
 					}
 			}
 			
