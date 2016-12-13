@@ -46,4 +46,6 @@ For the presentation of an example, in the video, the machine was driven by a du
 [1696]:https://github.com/Zhiyuan1991/HCIN720-GP/raw/master/images/IMG_1696.JPG
 [1698]:https://github.com/Zhiyuan1991/HCIN720-GP/raw/master/images/IMG_1698.JPG
 [1700]:https://github.com/Zhiyuan1991/HCIN720-GP/raw/master/images/IMG_1700.JPG
-[1694]:https://github.com/Zhiyuan1991/HCIN720-GP/raw/master/images/IMG_1694.JPG
+[1708]:https://github.com/Zhiyuan1991/HCIN720-GP/raw/master/images/IMG_1708.JPG
+[1710]:https://github.com/Zhiyuan1991/HCIN720-GP/raw/master/images/IMG_1710.JPG
+[1711]:https://github.com/Zhiyuan1991/HCIN720-GP/raw/master/images/IMG_1711.JPG
