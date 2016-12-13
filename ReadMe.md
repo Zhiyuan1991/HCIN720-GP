@@ -6,13 +6,16 @@ We made a
 Our system has three servos. One for linear motion, one for big circle rotation and one for small circle rotation. 
 
 First we designed and 3D printed this linear actuator base to connect to connect the three servos together. 
+
 ![][1694]
 
 Next we designed and 3D printed this connector to connect photon, the big servo and the holder together, so it can hang on the pegboard. 
+
 ![][1696]
 ![][1698]
 
 Then we laser cut the glass planes that will be stitched to fabric. We also create space on the glass plane to let gear bar go through. 
+
 ![][1700]
 
 ##Information
