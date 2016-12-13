@@ -38,7 +38,7 @@ At first we wanted to applied uniMorph. But after doing some research we found t
 We made a fully-functional fabric shape changing ambient display system. We did experiments on the extension level of different types of fabric and the estimation of servo's torque. We fully achieved our plan that we can rotate a part of the fabric in x-y plane to generate a twist circle and also pull the center of the fabric in z axis to create a hole on the fabric frame. Combined this two operation on fabric shape, we create interesting ambient display according to the data and it's easy for users to get a general idea of that data just by glancing at our display machine.
 
 ##Results
-See how it works on Youtube. 
+See how it works on Youtube.  https://youtu.be/NDni8YMzGxU
 
 For the presentation of an example, in the video, the machine was driven by a dummy data that increases the time spent on social media for 5 mins every 5 seconds and maximum time is 30 mins. The machine went back to the original shape after the time hit the maximum. By doing this, we just want to show that the shape changing is invertible.
 
