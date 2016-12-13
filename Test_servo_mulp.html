@@ -1,0 +1,117 @@
+<html>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<body>
+    <P>Set Servo Position:<br><br>
+    <input type="range" name="degBox" id="degBoxId" min="0" max="180" step="1" value="90" list="myData" onchange="setValue(this)">
+    <!-- This adds the tick marks to the range but does not in Safari -->
+    <datalist id="myData">
+       <option value="0">
+       <option value="30">
+       <option value="60">
+       <option value="90">
+       <option value="120">
+       <option value="150">
+       <option value="180">
+    </datalist>
+<br>
+<br>
+
+<input id="input_angle0" type="number" value=30>
+		<br>
+			<button id="startbutton" onclick="sparkSetPos0()">set</button>
+		<br><br>
+<input id="input_angle1" type="number" value=30>
+		<br>
+			<button id="startbutton" onclick="sparkSetPos1()">set</button>
+		<br><br>
+<input id="input_angle2" type="number" value=30>
+		<br>
+		<button id="startbutton" onclick="sparkSetPos2()">set</button>
+		<br>
+		<br>
+		<input id="input_color" type="number" value=30>
+		<br>
+		<br>
+		<button id="startbutton" onclick="sparkSetcolor()">setcolor</button>
+		<br>
+		<br>
+    <P>Current Position0: <span id="curPos0"></span><br>
+	<P>Current Position1: <span id="curPos1"></span><br>
+	<P>Current Position2: <span id="curPos2"></span><br>
+
+    <script type="text/javascript">
+      var deviceID    = "380025001347343338333633";
+      var accessToken = "8734299b639b819fcf341e4874fee78f80a03351";
+      var setFunc = "setpos";
+      var getFunc = "getpos";
+		
+		function sparkSetcolor(){
+			var newValue=parseFloat(document.getElementById("input_color").value);
+			var requestURL = "https://api.spark.io/v1/devices/" +deviceID + "/" + 'setColor' +"/";
+			$.post( requestURL, { params: newValue, access_token: accessToken });
+		}
+		function sparkSetPos0() {
+			var newValue=parseFloat(document.getElementById("input_angle0").value);
+				var requestURL = "https://api.spark.io/v1/devices/" +deviceID + "/" + setFunc +"0/";
+		        $.post( requestURL, { params: newValue, access_token: accessToken });
+		      }	  
+		function sparkSetPos1() {
+			var newValue=parseFloat(document.getElementById("input_angle1").value);
+				var requestURL = "https://api.spark.io/v1/devices/" +deviceID + "/" + setFunc + "1/";
+		        $.post( requestURL, { params: newValue, access_token: accessToken });
+		      }	  
+		function sparkSetPos2() {
+			var newValue=parseFloat(document.getElementById("input_angle2").value);
+				var requestURL = "https://api.spark.io/v1/devices/" +deviceID + "/" + setFunc + "2/";
+		        $.post( requestURL, { params: newValue, access_token: accessToken });
+		      }	  
+		
+		function sparkSetPos(newValue,device) {
+		var requestURL = "https://api.spark.io/v1/devices/" +deviceID + "/" + setFunc + device+"/";
+        $.post( requestURL, { params: newValue, access_token: accessToken });
+      }	      
+
+		function setValue(obj) {
+        var newValue = document.getElementById('degBoxId').value;
+        sparkSetPos(newValue);
+      }
+      
+		function fineAdjust(value) {
+        var currentValue = parseInt(document.getElementById('curPos').innerHTML);
+        var newValue = value + currentValue;
+        sparkSetPos(newValue,0);
+      }
+
+		function fineAdjust1(value) {
+        var currentValue = parseInt(document.getElementById('curPos').innerHTML);
+        var newValue = value + currentValue;
+        sparkSetPos(newValue,1);
+      }
+
+		function fineAdjust2(value) {
+        var currentValue = parseInt(document.getElementById('curPos').innerHTML);
+        var newValue = value + currentValue;
+        sparkSetPos(newValue,2);
+      }
+		
+		window.setInterval(function() {
+        requestURL = "https://api.spark.io/v1/devices/" + deviceID + "/" + getFunc + "0/?access_token=" + accessToken;
+        $.getJSON(requestURL, function(json) {
+                 document.getElementById("curPos0").innerHTML = json.result + "&deg;";
+                 document.getElementById("curPos0").style.fontSize = "28px";
+                 });
+		requestURL = "https://api.spark.io/v1/devices/" + deviceID + "/" + getFunc + "1/?access_token=" + accessToken;
+        $.getJSON(requestURL, function(json) {
+                 document.getElementById("curPos1").innerHTML = json.result + "&deg;";
+                 document.getElementById("curPos1").style.fontSize = "28px";
+                 });
+		requestURL = "https://api.spark.io/v1/devices/" + deviceID + "/" + getFunc + "2/?access_token=" + accessToken;
+        $.getJSON(requestURL, function(json) {
+                 document.getElementById("curPos2").innerHTML = json.result + "&deg;";
+                 document.getElementById("curPos2").style.fontSize = "28px";
+                 });
+      }, 1000);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Time Doc</title>
+		<script src="node_modules/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			//photon set up
+			var deviceID    = "380025001347343338333633";
+			var accessToken = "8734299b639b819fcf341e4874fee78f80a03351";
+			var setFunc = "setpos";
+			var getFunc = "getpos";
+			
+			//global varibles
+			var set_total_time=1800;
+			
+			//create date
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth()+1; //January is 0!
+			var yyyy = today.getFullYear();
+			if(dd<10) {
+			    dd='0'+dd
+			} 
+			if(mm<10) {
+			    mm='0'+mm
+			} 
+			today = yyyy+'-'+mm+'-'+dd;
+			var start_date=today;
+			var end_date=today;
+			
+			//for testing
+			var start_date="2016-12-01";
+			
+			//sub function
+			function setpos0(newValue) //set color
+			{
+				var requestURL = "https://api.spark.io/v1/devices/" +deviceID + "/" + 'setpos0' +"/";
+				$.post( requestURL, { params: newValue*100, access_token: accessToken });
+			}
+			
+			
+			var reset_pos0=60;
+			var reset_pos1=10;
+			var reset_pos2=0;
+			
+			function reset()
+			{
+				setpos0(0);
+			}
+			
+			function show_pos()
+			{
+				requestURL = "https://api.spark.io/v1/devices/" + deviceID + "/" + getFunc + "0/?access_token=" + accessToken;
+				$.getJSON(requestURL, function(json) {				document.getElementById("curPos0").innerHTML = json.result + "&deg;";
+				});
+							
+				requestURL = "https://api.spark.io/v1/devices/" + deviceID + "/" + getFunc + "1/?access_token=" + accessToken;
+				$.getJSON(requestURL, function(json) {				document.getElementById("curPos1").innerHTML = json.result + "&deg;";
+				});
+							
+				requestURL = "https://api.spark.io/v1/devices/" + deviceID + "/" + getFunc + "2/?access_token=" + accessToken;
+				$.getJSON(requestURL, function(json) {				document.getElementById("curPos2").innerHTML = json.result + "&deg;";
+				});
+							
+			}
+			
+			function ProcessData(time_on_socialmedia)
+			{
+				var time_ratio=Math.min(time_on_socialmedia/set_total_time,1);
+				document.getElementById("fraction").innerHTML = time_ratio*100+"%";
+								
+				setpos0(time_ratio);
+			}
+			
+			function GetData()
+			{
+				var time_on_socialmedia=0;
+				var Token="OTNkNDdmODBjMGVkMzY2ZGY4NzY1M2ViZjE3YzUzMWNkN2QwYzYwZjJiYjM5ZjYxMGQyYTAxZTM5NDZhMThkNQ";
+				var api_url="https://webapi.timedoctor.com/v1.1/companies/422812/webandapp?access_token="+Token+"&_format=json&start_date="+start_date+"&end_date="+end_date+"&user_id=659626";
+				var jqxhr = $.get(api_url)
+				.done(function(results) {
+				//get time spend array
+				//console.log(results[0].websites_and_apps[1].timeSpend);
+				var time_list=results[0].websites_and_apps;
+				for (var i=0;i<time_list.length;i++){
+					var this_item=time_list[i];
+					if (this_item.name=="facebook.com" || this_item.name=="twitter.com"){
+						time_on_socialmedia+=this_item.timeSpend;
+					}
+					document.getElementById("time_sm").innerHTML = time_on_socialmedia/60 + " mins";
+				}
+				console.log(time_on_socialmedia);
+				
+				//process data and send to photon
+				ProcessData(time_on_socialmedia);
+				
+			  	})
+			  	.fail(function() {
+				    alert( "Load data from API faied" );
+				});
+			}
+			
+			function start(selection)
+			{
+				var input_total_time=60*parseFloat(document.getElementById("input_time").value);
+				if (input_total_time)
+				{
+					set_total_time=input_total_time;
+				}
+				else{
+					set_total_time=1800;
+				}
+				document.getElementById("max_time").innerHTML = set_total_time/60 +' mins';
+				
+				if (selection){
+					window.setInterval(function()
+					{
+						GetData();
+						show_pos();
+					},5000);
+				}
+				else{
+					var time_on_socialmedia=0;
+					window.setInterval(function()
+					{
+						ProcessData(time_on_socialmedia);
+						document.getElementById("time_sm").innerHTML = time_on_socialmedia/60 + " mins";
+						console.log(time_on_socialmedia);
+						show_pos();
+						time_on_socialmedia+=300;
+						if (time_on_socialmedia>set_total_time+300){
+							time_on_socialmedia=0;
+						}
+					},5000);
+				}
+				
+			}
+			
+		</script>
+	</head>
+	<body>
+		<br><br>
+		    <button id="resetbutton" onclick="reset()">reset</button>
+		<br><br>
+		
+		Set maximun minutes:<br>
+		<input id="input_time" type="number" value=60>
+		<br>
+			<button id="API_button" onclick="start(1)">Start API</button>
+		<br>
+		<button id="Dummy_button" onclick="start(0)">Run Dummy Data</button>
+		<br>
+		<P>You set the maximun time as: <span id="max_time"></span><br>
+		<P>Time have spent on Sociak Media: <span id="time_sm"></span><br>
+		<P>Fraction: <span id="fraction"></span><br>
+		
+		
+		<br>
+		<P>Current Position: <span id="curPos0"></span><br>
+		<P>Current Position: <span id="curPos1"></span><br>
+		<P>Current Position: <span id="curPos2"></span><br>
+	</body>
+</html>
